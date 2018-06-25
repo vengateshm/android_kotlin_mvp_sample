@@ -19,7 +19,10 @@ class MoviesListPresenter : BasePresenter<MoviesListView> {
         topRatedMoviesDisposable = interactor?.getTopRatedMovies(apiKey, language, page)
                 ?.subscribe(
                         { topRatedMovies ->
-                            view?.onMoviesListSuccess(topRatedMovies.moviesList)
+                            val movies = topRatedMovies.moviesList.filter {
+                                it.originalLanguage.equals("en", true)
+                            }
+                            view?.onMoviesListSuccess(movies.toMutableList())
                         },
                         { throwable ->
                             view?.onError(throwable.localizedMessage)
